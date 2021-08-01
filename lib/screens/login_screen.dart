@@ -17,6 +17,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
   String? name=' ';
+  @override
+  Future<void> resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +106,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Home(name: ds.get('name'),email: email)));
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('No user found for this email'),
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.fromLTRB(35.0, 0, 35.0, 10.0),
+                      backgroundColor: Colors.redAccent,));
                     print('No user found for that email.');
                   } else if (e.code == 'wrong-password') {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Wrong password'),
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.fromLTRB(35.0, 0, 35.0, 10.0),
+                      backgroundColor: Colors.redAccent,));
                     print('Wrong password provided for that user.');
                   }
                 }
@@ -124,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           SizedBox(height: 20.0),
           Divider(thickness: 2.0),
-          SizedBox(height: 20.0),
+          SizedBox(height: 10.0),
           Center(
             child: Row(
               children: [
@@ -139,7 +153,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(fontStyle: FontStyle.italic,fontSize: 15.0)))
               ],
             ),
-          )
+
+          ),
+          SizedBox(height: 20.0),
+          GestureDetector(onTap: (){
+            resetPassword(email);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Password reset link is sent to your registered email id'),
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.fromLTRB(35.0, 0, 35.0, 10.0),
+              backgroundColor: Colors.brown,));
+
+          },
+              child: Text('Forgot Password?',
+                  style: TextStyle(fontStyle: FontStyle.italic,fontSize: 15.0)))
         ],
       ),
     )

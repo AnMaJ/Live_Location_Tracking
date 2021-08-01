@@ -196,7 +196,7 @@ Row(children: <Widget>[
                       addLocation();
                       FirebaseFirestore.instance.collection('users');
                       DocumentSnapshot ds= await users.doc(widget.email).get();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => settings(email:widget.email,password: ds.get('password'),name: widget.name)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => settings(email:widget.email as String,password: ds.get('password'),name: widget.name)));
                     }
                     ,),
                 ),

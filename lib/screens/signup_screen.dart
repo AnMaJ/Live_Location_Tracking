@@ -141,8 +141,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('Please provide a password at least 6 characters long'),
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.fromLTRB(35.0, 0, 35.0, 10.0),
+                        backgroundColor: Colors.brown,));
                       print('The password provided is too weak.');
                     } else if (e.code == 'email-already-in-use') {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('An account already exists for this email'),
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.fromLTRB(35.0, 0, 35.0, 10.0),
+                        backgroundColor: Colors.brown,));
                       print('The account already exists for that email.');
                     }
                   } catch (e) {
